@@ -11,7 +11,7 @@
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: url('bg.jpg') no-repeat center center fixed;
+       background: url("{{ url_for('static', filename='bg.jpg') }}") no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
@@ -63,7 +63,7 @@
     <div class="row w-100">
       <!-- Left Image Side -->
       <div class="col-md-6 d-none d-md-block">
-        <img src="doctor.jpg" class="img-fluid rounded shadow" alt="Doctor Image">
+        <img src="{{ url_for('static', filename='doctor.jpg') }}" class="img-fluid rounded shadow" alt="Doctor Image">
       </div>
 
       <!-- Right Side UI -->
