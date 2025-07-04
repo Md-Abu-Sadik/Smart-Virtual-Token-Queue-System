@@ -1,30 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Get Your Token</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Smart Token System</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    /* Full-screen blurred background */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: url('bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    /* Dark overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); /* Darken */
+      backdrop-filter: blur(5px); /* Blur effect */
+      z-index: -1;
+    }
+
+    .container-fluid {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Optional animation class (if you want to animate inputs/buttons) */
+    .animate {
+      transition: all 0.3s ease-in-out;
+    }
+
+    .animate:hover {
+      transform: scale(1.02);
+    }
+
+    /* Optional: make text white on background */
+    h2, .btn-outline-primary {
+      color: white;
+    }
+
+    .btn-outline-primary {
+      border-color: white;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: white;
+      color: black;
+    }
+  </style>
 </head>
 <body>
-  <div class="container mt-5" style="max-width: 500px;">
-    <h3 class="mb-4 text-center">🎫 Smart Token System</h3>
-    <form method="POST" action="#">
-      <div class="mb-3">
-        <label class="form-label">Your Name</label>
-        <input type="text" class="form-control" name="name" required>
+  <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-100">
+      <!-- Left Image Side -->
+      <div class="col-md-6 d-none d-md-block">
+        <img src="doctor.jpg" class="img-fluid rounded shadow" alt="Doctor Image">
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Select Service</label>
-        <select class="form-select" name="service_type" required>
-          <option value="">-- Choose Service --</option>
-          <option value="General">General</option>
-          <option value="Doctor">Doctor</option>
-          <option value="Billing">Billing</option>
+      <!-- Right Side UI -->
+      <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center">
+        <h2 class="mb-4 fw-bold"><span>🪪</span> Smart Token System</h2>
+
+        <input type="text" class="form-control w-75 mb-3 animate" placeholder="Your Name">
+        
+        <select class="form-select w-75 mb-3 animate">
+          <option>-- Choose Service --</option>
+          <option>Dental</option>
+          <option>Eye Checkup</option>
+          <option>General Physician</option>
         </select>
-      </div>
 
-      <button type="submit" class="btn btn-primary w-100">Get Token</button>
-    </form>
+        <button class="btn btn-primary w-75 mb-3 animate">Get Token</button>
+
+        <!-- Optional More Buttons -->
+        <div class="d-flex flex-column align-items-center w-75">
+          <button class="btn btn-outline-primary w-100 mb-2 animate">Our Team</button>
+          <button class="btn btn-outline-primary w-100 mb-2 animate">Book Appointment</button>
+          <button class="btn btn-outline-primary w-100 mb-2 animate">Online Consultation</button>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>

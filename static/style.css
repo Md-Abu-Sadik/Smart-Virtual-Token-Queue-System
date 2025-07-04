@@ -1,0 +1,22 @@
+body {
+  background: #f8f9fa;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.animate {
+  transition: transform 0.3s ease-in-out;
+}
+
+.animate:hover {
+  transform: scale(1.03);
+}
+.animate {
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
