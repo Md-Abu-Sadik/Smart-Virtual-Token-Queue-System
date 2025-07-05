@@ -15,6 +15,13 @@ body {
   animation: fadeIn 1s ease-in-out forwards;
 }
 
+.left-side {
+  background: url("{{ url_for('static', filename='clinic.jpg') }}") no-repeat center center;
+  background-size: cover;
+  height: 100vh;
+}
+
+
 @keyframes fadeIn {
   to {
     opacity: 1;
