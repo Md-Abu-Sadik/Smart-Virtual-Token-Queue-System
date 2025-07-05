@@ -31,5 +31,17 @@ def token():
     return render_template('token.html', name=name, service=service, token=token_number)
 
 
+@app.route('/book_appointment')
+def book_appointment():
+    return render_template('book_appointment.html')
+
+@app.route('/submit_appointment', methods=['POST'])
+def submit_appointment():
+    name = request.form['name']
+    phone = request.form['phone']
+    age = request.form['age']
+    service = request.form['service']
+    return f"<h2>Appointment booked for {name} ({service})</h2>"
+
 if __name__ == '__main__':
     app.run(debug=True)
