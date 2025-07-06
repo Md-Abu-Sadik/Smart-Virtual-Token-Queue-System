@@ -7,6 +7,14 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
+    .main-title {
+      font-size: 48px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      margin-top: 20px;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -67,47 +75,53 @@
 
       <!-- Right Side UI -->
       <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center">
-        <h2 class="mb-4 fw-bold"><span>🪪</span> Smart Token System</h2>
+        <h2 class="mb-4 fw-bold main-title"><span>🪪</span> Smart Token System</h2>
 
         <!-- ✅ Form Starts Here -->
         <form method="POST" action="/token" class="w-100 d-flex flex-column align-items-center">
+          <!-- Name Input -->
           <input type="text" name="name" class="form-control w-75 mb-3 animate" placeholder="Your Name" required>
 
-          <select name="service" class="form-select w-75 mb-3 animate" required>
-            <option value="">-- Choose Service --</option>
-            <option value="Dental">Dental</option>
-            <option value="Eye Checkup">Eye Checkup</option>
-            <option value="General Physician">General Physician</option>
-            <option value="Pediatrics">Pediatrics</option>
-            <option value="Gynecology">Gynecology</option>
-            <option value="ENT">ENT (Ear, Nose, Throat)</option>
-            <option value="Dermatology">Dermatology (Skin)</option>
-            <option value="Cardiology">Cardiology</option>
-            <option value="Orthopedics">Orthopedics</option>
-            <option value="Neurology">Neurology</option>
-            <option value="Psychiatry">Psychiatry</option>
-            <option value="Physiotherapy">Physiotherapy</option>
-            <option value="Vaccination">Vaccination</option>
-            <option value="Blood Test">Blood Test</option>
-          </select>
+          <!-- Service & Appointment ID in same row -->
+          <div class="row w-75 mb-3">
+            <div class="col-md-6 mb-2 mb-md-0">
+              <select name="service" class="form-select animate" required>
+                <option value="">-- Choose Service --</option>
+                <option value="Dental">Dental</option>
+                <option value="Eye Checkup">Eye Checkup</option>
+                <option value="General Physician">General Physician</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Gynecology">Gynecology</option>
+                <option value="ENT">ENT (Ear, Nose, Throat)</option>
+                <option value="Dermatology">Dermatology (Skin)</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Orthopedics">Orthopedics</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Psychiatry">Psychiatry</option>
+                <option value="Physiotherapy">Physiotherapy</option>
+                <option value="Vaccination">Vaccination</option>
+                <option value="Blood Test">Blood Test</option>
+              </select>
+            </div>
 
+            <div class="col-md-6">
+              <input type="text" name="appointment_id" class="form-control animate" placeholder="Appointment ID (optional)">
+            </div>
+          </div>
+
+          <!-- Submit Button -->
           <button type="submit" class="btn btn-primary w-75 mb-3 animate">Get Token</button>
         </form>
         <!-- ✅ Form Ends Here -->
 
         <!-- Optional More Buttons -->
-        <!-- Updated Buttons: Replaced "Our Team" with "Token Status" -->
         <div class="d-flex flex-column align-items-center w-75">
           <a href="/token_status" class="btn btn-outline-light w-100 mb-2">Token Status</a>
           <a href="/book_appointment" class="btn btn-outline-primary w-100 mb-2 animate">Book Appointment</a>
           <button class="btn btn-outline-primary w-100 mb-2 animate">Online Consultation</button>
-          <!-- ✅ New Buttons Start Here -->
-
-          <button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/my_appointments'">My
-            Appointments</button>
-          <button class="btn btn-outline-primary w-100 mb-2 animate"
-            onclick="location.href='/manage_appointment'">Cancel or Reschedule Appointment</button>
-          <!-- ✅ New Buttons End Here -->
+          <button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/my_appointments'">My Appointments</button>
+          <button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/manage_appointment'">Cancel or Reschedule Appointment</button>
+          <a href="/admin" class="btn btn-danger w-100 mt-2 animate">🔐 Admin Panel</a>
         </div>
 
       </div>

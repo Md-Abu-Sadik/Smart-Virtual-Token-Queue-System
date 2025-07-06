@@ -13,14 +13,17 @@ DATA_FILE = 'appointments.json'
 def load_appointments():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r') as f:
-            return json.load(f)
+            try:
+                return json.load(f)
+            except json.JSONDecodeError:
+                return []  
     return []
 
 def save_appointments(data):
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=4)
 
-appointments = load_appointments()  
+appointments = load_appointments() 
 
 # Token counter (for demo use only – resets on app restart)
 token_counter = {
@@ -29,26 +32,54 @@ token_counter = {
     "General Physician": 1
 }
 
+def load_appointments():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as f:
+            try:
+                return json.load(f)
+            except json.JSONDecodeError:
+                return []  
+
 @app.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/token', methods=['POST'])
-def token():
+@app.route('/get_token', methods=['POST'])
+def get_token():
     name = request.form['name']
     service = request.form['service']
-    
-    token_prefix = {
-        "Dental": "D",
-        "Eye Checkup": "E",
-        "General Physician": "G"
-    }.get(service, "X")
+    appointment_id = request.form.get('appointment_id')  # Optional field
 
-    number = token_counter[service]
-    token_number = f"{token_prefix}-{number:03d}"
-    token_counter[service] += 1
+    token_number = token_counter.get(service, 1)
+    token_counter[service] = token_number + 1
 
-    return render_template('token.html', name=name, service=service, token=token_number)
+    # Create token
+    token = {
+        "id": str(uuid.uuid4()),
+        "name": name,
+        "service": service,
+        "token_number": token_number,
+        "appointment_id": appointment_id,
+        "status": "Pending"  # ✅ Standardized to match admin panel logic
+    }
+
+    # ✅ Save token to tokens.json
+    tokens = []
+    if os.path.exists('tokens.json'):
+        with open('tokens.json', 'r') as f:
+            try:
+                tokens = json.load(f)
+            except json.JSONDecodeError:
+                tokens = []
+
+    tokens.append(token)
+
+    with open('tokens.json', 'w') as f:
+        json.dump(tokens, f, indent=4)
+
+    # ✅ Return success page
+    return render_template("token_success.html", token=token)
+
 
 
 @app.route('/book_appointment')
@@ -85,11 +116,7 @@ def doctor_schedule():
 
 @app.route('/my_appointments')
 def my_appointments():
-    conn = sqlite3.connect('appointments.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM appointments")
-    appointments = cursor.fetchall()
-    conn.close()
+    appointments = load_appointments()
     return render_template("my_appointments.html", appointments=appointments)
 
 
@@ -119,7 +146,9 @@ def manage_appointment():
 
 @app.route('/token_status')
 def token_status():
-    return render_template('token_status.html')
+    tokens = load_appointments()
+    services = sorted({token['service'] for token in tokens})
+    return render_template('token_status.html', tokens=tokens, services=services)
 
 def init_db():
     conn = sqlite3.connect('appointments.db')
@@ -138,6 +167,62 @@ def init_db():
 
 # Call it once when app starts
 init_db()
+
+
+@app.route('/token', methods=['POST'])
+def generate_token():
+    name = request.form.get('name')
+    service = request.form.get('service')
+    appointment_id = request.form.get('appointment_id')  # Optional
+
+    # Load existing tokens
+    tokens = load_appointments()
+
+    # Count how many tokens exist for this service
+    existing_tokens = [t for t in tokens if t["service"] == service]
+    token_number = f"{service[0].upper()}-{len(existing_tokens) + 1:03d}"
+
+    # Create new token
+    token = {
+        "number": token_number,
+        "name": name,
+        "service": service,
+        "appointment_id": appointment_id
+    }
+
+    # Save new token
+    tokens.append(token)
+    save_appointments(tokens)
+
+    return render_template('token_success.html', token=token)
+
+
+@app.route('/admin')
+def admin_panel():
+    with open('appointments.json') as f:
+        tokens = json.load(f)
+    return render_template('admin.html', tokens=tokens)
+
+# Update token status
+@app.route('/update_token/<token_number>')
+def update_token(token_number):
+    name = request.args.get('name')  # Get the name from query string
+
+    # Load appointments from JSON
+    with open('appointments.json', 'r') as f:
+        appointments = json.load(f)
+
+    # Update the matching token (both number and name must match)
+    for token in appointments:
+        if token.get('number') == token_number and token.get('name') == name:
+            token['status'] = 'Completed'
+            break
+
+    # Save changes back to JSON
+    with open('appointments.json', 'w') as f:
+        json.dump(appointments, f, indent=4)
+
+    return redirect('/admin')# or wherever you want to go
 
 
 

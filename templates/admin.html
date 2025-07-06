@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Token Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+
+<body class="bg-dark text-light">
+
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">Admin Panel - Token Management</h3>
+        <table class="table table-dark table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Token No</th>
+                    <th>Name</th>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for token in tokens %}
+                <tr>
+                    <td>{{ token.get('token_number', token.get('number', 'N/A')) }}</td>
+                    <td>{{ token.name }}</td>
+                    <td>{{ token.service }}</td>
+                    <td>
+                        {% if token.get('status') %}
+                        <span class="badge bg-success">{{ token['status'] }}</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Unknown</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if token.status != "Done" %}
+                        <a href="{{ url_for('update_token', token_number=token.number) }}?name={{ token.name }}">
+                            <button class="btn btn-primary btn-sm">Next</button>
+                        </a>
+                        {% else %}
+                        <span class="text-muted">Complete</span>
+                        {% endif %}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

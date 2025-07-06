@@ -95,3 +95,10 @@ body::after {
     transform: translateY(0);
   }
 }
+
+.big-title {
+  font-size: 64px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
