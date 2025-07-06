@@ -43,5 +43,18 @@ def submit_appointment():
     service = request.form['service']
     return f"<h2>Appointment booked for {name} ({service})</h2>"
 
+@app.route('/doctor_schedule')
+def doctor_schedule():
+    return render_template('doctor_schedule.html')
+
+@app.route('/my_appointments')
+def my_appointments():
+    return render_template('my_appointments.html')
+
+@app.route('/manage_appointment')
+def manage_appointment():
+    return render_template('manage_appointment.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
