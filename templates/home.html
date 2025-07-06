@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Smart Token System</title>
@@ -40,7 +41,8 @@
       transform: scale(1.02);
     }
 
-    h2, .btn-outline-primary {
+    h2,
+    .btn-outline-primary {
       color: white;
     }
 
@@ -54,6 +56,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
     <div class="row w-100">
@@ -69,24 +72,24 @@
         <!-- ✅ Form Starts Here -->
         <form method="POST" action="/token" class="w-100 d-flex flex-column align-items-center">
           <input type="text" name="name" class="form-control w-75 mb-3 animate" placeholder="Your Name" required>
-          
+
           <select name="service" class="form-select w-75 mb-3 animate" required>
-  <option value="">-- Choose Service --</option>
-  <option value="Dental">Dental</option>
-  <option value="Eye Checkup">Eye Checkup</option>
-  <option value="General Physician">General Physician</option>
-  <option value="Pediatrics">Pediatrics</option>
-  <option value="Gynecology">Gynecology</option>
-  <option value="ENT">ENT (Ear, Nose, Throat)</option>
-  <option value="Dermatology">Dermatology (Skin)</option>
-  <option value="Cardiology">Cardiology</option>
-  <option value="Orthopedics">Orthopedics</option>
-  <option value="Neurology">Neurology</option>
-  <option value="Psychiatry">Psychiatry</option>
-  <option value="Physiotherapy">Physiotherapy</option>
-  <option value="Vaccination">Vaccination</option>
-  <option value="Blood Test">Blood Test</option>
-</select>
+            <option value="">-- Choose Service --</option>
+            <option value="Dental">Dental</option>
+            <option value="Eye Checkup">Eye Checkup</option>
+            <option value="General Physician">General Physician</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="Gynecology">Gynecology</option>
+            <option value="ENT">ENT (Ear, Nose, Throat)</option>
+            <option value="Dermatology">Dermatology (Skin)</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Orthopedics">Orthopedics</option>
+            <option value="Neurology">Neurology</option>
+            <option value="Psychiatry">Psychiatry</option>
+            <option value="Physiotherapy">Physiotherapy</option>
+            <option value="Vaccination">Vaccination</option>
+            <option value="Blood Test">Blood Test</option>
+          </select>
 
           <button type="submit" class="btn btn-primary w-75 mb-3 animate">Get Token</button>
         </form>
@@ -94,19 +97,22 @@
 
         <!-- Optional More Buttons -->
         <!-- Updated Buttons: Replaced "Our Team" with "Token Status" -->
-<div class="d-flex flex-column align-items-center w-75">
-  <button class="btn btn-outline-primary w-100 mb-2 animate">Token Status</button>
-  <a href="/book_appointment" class="btn btn-outline-primary w-100 mb-2 animate">Book Appointment</a>
-  <button class="btn btn-outline-primary w-100 mb-2 animate">Online Consultation</button>
-  <!-- ✅ New Buttons Start Here -->
+        <div class="d-flex flex-column align-items-center w-75">
+          <a href="/token_status" class="btn btn-outline-light w-100 mb-2">Token Status</a>
+          <a href="/book_appointment" class="btn btn-outline-primary w-100 mb-2 animate">Book Appointment</a>
+          <button class="btn btn-outline-primary w-100 mb-2 animate">Online Consultation</button>
+          <!-- ✅ New Buttons Start Here -->
 
-<button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/my_appointments'">My Appointments</button>
-<button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/manage_appointment'">Cancel or Reschedule Appointment</button>
-<!-- ✅ New Buttons End Here -->
-</div>
+          <button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/my_appointments'">My
+            Appointments</button>
+          <button class="btn btn-outline-primary w-100 mb-2 animate"
+            onclick="location.href='/manage_appointment'">Cancel or Reschedule Appointment</button>
+          <!-- ✅ New Buttons End Here -->
+        </div>
 
       </div>
     </div>
   </div>
 </body>
+
 </html>

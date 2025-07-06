@@ -56,5 +56,10 @@ def manage_appointment():
     return render_template('manage_appointment.html')
 
 
+@app.route('/token_status')
+def token_status():
+    return render_template('token_status.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
