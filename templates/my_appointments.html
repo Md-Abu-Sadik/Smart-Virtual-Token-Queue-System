@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>My Appointments</title>
@@ -20,7 +21,7 @@
       left: 0;
       height: 100%;
       width: 100%;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       z-index: -1;
       filter: blur(5px);
     }
@@ -31,16 +32,18 @@
       color: white;
     }
 
-    .table td, .table th {
+    .table td,
+    .table th {
       background-color: rgba(255, 255, 255, 0.9);
       color: #000;
     }
   </style>
 </head>
+
 <body>
   <div class="container py-5">
     <h2 class="text-center mb-4">📋 My Appointments</h2>
-    
+
     <table class="table table-bordered table-hover shadow">
       <thead class="table-dark">
         <tr>
@@ -53,14 +56,15 @@
       <tbody>
         {% for appt in appointments %}
         <tr>
-          <td>{{ appt[1] }}</td>
-          <td>{{ appt[2] }}</td>
-          <td>{{ appt[3] }}</td>
-          <td>{{ appt[4] }}</td>
+          <td>{{ appt.date }}</td>
+          <td>{{ appt.time }}</td>
+          <td>{{ appt.doctor }}</td>
+          <td>{{ appt.service }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </body>
+
 </html>

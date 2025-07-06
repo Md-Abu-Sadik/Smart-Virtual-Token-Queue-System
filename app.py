@@ -1,8 +1,26 @@
 from flask import Flask, render_template, request, redirect
-
+from flask import render_template
 import sqlite3
+import uuid
+import os
+import json
+from flask import Flask
 
 app = Flask(__name__)
+
+DATA_FILE = 'appointments.json' 
+
+def load_appointments():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as f:
+            return json.load(f)
+    return []
+
+def save_appointments(data):
+    with open(DATA_FILE, 'w') as f:
+        json.dump(data, f, indent=4)
+
+appointments = load_appointments()  
 
 # Token counter (for demo use only – resets on app restart)
 token_counter = {
@@ -43,15 +61,23 @@ def submit_appointment():
     phone = request.form['phone']
     age = request.form['age']
     service = request.form['service']
+    appointment_id = str(uuid.uuid4())[:8]
 
-    conn = sqlite3.connect('appointments.db')
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO appointments (name, phone, age, service) VALUES (?, ?, ?, ?)", 
-                   (name, phone, age, service))
-    conn.commit()
-    conn.close()
+    new_appt = {
+        'id': appointment_id,
+        'name': name,
+        'phone': phone,
+        'age': age,
+        'service': service,
+        'doctor': 'Dr. Ahsan',
+        'date': '2025-07-08',
+        'time': '10:30 AM'
+    }
 
-    return redirect('/my_appointments') 
+    appointments.append(new_appt)
+    save_appointments(appointments)
+
+    return render_template("appointment_success.html", appointment_id=appointment_id)
 
 @app.route('/doctor_schedule')
 def doctor_schedule():
@@ -62,14 +88,33 @@ def my_appointments():
     conn = sqlite3.connect('appointments.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM appointments")
-    data = cursor.fetchall()
+    appointments = cursor.fetchall()
     conn.close()
-    return render_template('my_appointments.html', appointments=data)
+    return render_template("my_appointments.html", appointments=appointments)
 
 
-@app.route('/manage_appointment')
+@app.route('/manage_appointment', methods=['GET', 'POST'])
 def manage_appointment():
-    return render_template('manage_appointment.html')
+    message = ''
+    if request.method == 'POST':
+        appointment_id = request.form['appointment_id']
+        action = request.form['action']
+        index = next((i for i, a in enumerate(appointments) if a['id'] == appointment_id), None)
+
+        if index is not None:
+            if action == 'cancel':
+                appointments.pop(index)
+                save_appointments(appointments)
+                message = f"Appointment {appointment_id} canceled."
+            elif action == 'reschedule':
+                appointments[index]['time'] = "1:00 PM"  # Simulate rescheduling
+                save_appointments(appointments)
+                message = f"Appointment {appointment_id} rescheduled."
+        else:
+            message = "Appointment ID not found."
+
+    return render_template('manage_appointment.html', message=message)
+
 
 
 @app.route('/token_status')

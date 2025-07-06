@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Appointment Successful</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-success text-white">
+  <div class="container text-center py-5">
+    <h1>🎉 Appointment Confirmed!</h1>
+    <p>Your appointment has been successfully booked.</p>
+    <h4>🆔 Your Appointment ID:</h4>
+    <div class="fs-3 fw-bold bg-light text-dark p-2 rounded">
+      {{ appointment_id }}
+    </div>
+    <p class="mt-3">Keep this ID safe. You’ll need it to cancel or reschedule.</p>
+    <a href="/" class="btn btn-light mt-3">Go Home</a>
+  </div>
+</body>
+</html>
