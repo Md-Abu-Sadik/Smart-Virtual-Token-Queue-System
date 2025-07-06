@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
+
+import sqlite3
 
 app = Flask(__name__)
 
@@ -41,7 +43,15 @@ def submit_appointment():
     phone = request.form['phone']
     age = request.form['age']
     service = request.form['service']
-    return f"<h2>Appointment booked for {name} ({service})</h2>"
+
+    conn = sqlite3.connect('appointments.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO appointments (name, phone, age, service) VALUES (?, ?, ?, ?)", 
+                   (name, phone, age, service))
+    conn.commit()
+    conn.close()
+
+    return redirect('/my_appointments') 
 
 @app.route('/doctor_schedule')
 def doctor_schedule():
@@ -49,7 +59,13 @@ def doctor_schedule():
 
 @app.route('/my_appointments')
 def my_appointments():
-    return render_template('my_appointments.html')
+    conn = sqlite3.connect('appointments.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM appointments")
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('my_appointments.html', appointments=data)
+
 
 @app.route('/manage_appointment')
 def manage_appointment():
@@ -59,6 +75,27 @@ def manage_appointment():
 @app.route('/token_status')
 def token_status():
     return render_template('token_status.html')
+
+def init_db():
+    conn = sqlite3.connect('appointments.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS appointments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            age INTEGER NOT NULL,
+            service TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+# Call it once when app starts
+init_db()
+
+
+
 
 
 if __name__ == '__main__':
