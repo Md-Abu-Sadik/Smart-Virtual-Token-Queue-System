@@ -105,9 +105,13 @@
             </div>
 
             <div class="col-md-6">
-              <input type="text" name="appointment_id" class="form-control animate" placeholder="Appointment ID (optional)">
+              <input type="text" name="appointment_id" class="form-control animate"
+                placeholder="Appointment ID (optional)">
             </div>
           </div>
+
+          <!-- ✅ Phone Input -->
+          <input type="text" name="phone" class="form-control w-75 mb-3 animate" placeholder="Phone Number" required>
 
           <!-- Submit Button -->
           <button type="submit" class="btn btn-primary w-75 mb-3 animate">Get Token</button>
@@ -119,10 +123,13 @@
           <a href="/token_status" class="btn btn-outline-light w-100 mb-2">Token Status</a>
           <a href="/book_appointment" class="btn btn-outline-primary w-100 mb-2 animate">Book Appointment</a>
           <button class="btn btn-outline-primary w-100 mb-2 animate">Online Consultation</button>
-          <button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/my_appointments'">My Appointments</button>
-          <button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/manage_appointment'">Cancel or Reschedule Appointment</button>
+          <button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/my_appointments'">My
+            Appointments</button>
+          <button class="btn btn-outline-primary w-100 mb-2 animate"
+            onclick="location.href='/manage_appointment'">Cancel or Reschedule Appointment</button>
           <a href="/admin" class="btn btn-danger w-100 mt-2 animate">🔐 Admin Panel</a>
         </div>
+
 
       </div>
     </div>

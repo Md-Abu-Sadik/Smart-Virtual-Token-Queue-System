@@ -45,6 +45,10 @@ def home():
 def book_appointment():
     return render_template('book_appointment.html')
 
+@app.route('/doctor_schedule')
+def doctor_schedule():
+    return render_template('doctor_schedule.html')
+
 @app.route('/submit_appointment', methods=['POST'])
 def submit_appointment():
     appointments = load_appointments()
@@ -70,19 +74,51 @@ def submit_appointment():
 
 @app.route('/get_token', methods=['POST'])
 def get_token():
-    tokens = load_tokens()
-    name = request.form['name']
-    service = request.form['service']
-    appointment_id = request.form.get('appointment_id')
+    name = request.form.get('name')
+    service = request.form.get('service')
+    phone = request.form.get('phone')  # ✅ Required
+    appointment_id = request.form.get('appointment_id')  # ❌ Optional
 
-    # Create token number
-    service_initial = service[0].upper()
-    count = sum(1 for t in tokens if t['service'] == service)
-    token_number = f"{service_initial}-{count + 1:03d}"
+    # Simple validation for required fields
+    if not name or not service or not phone:
+        return "Name, service, and phone number are required!", 400
+
+    tokens = load_tokens()
+    token_number = f"{service[0].upper()}-{len(tokens) + 1:03d}"
 
     token = {
         "number": token_number,
         "name": name,
+        "phone": phone,
+        "service": service,
+        "appointment_id": appointment_id if appointment_id else None,
+        "status": "Pending"
+    }
+
+    tokens.append(token)
+    save_tokens(tokens)
+
+    return render_template("token_success.html", token=token)
+
+
+@app.route('/token', methods=['POST'])
+def generate_token():
+    name = request.form.get('name')
+    phone = request.form.get('phone')
+    service = request.form.get('service')
+    appointment_id = request.form.get('appointment_id')  # Optional
+
+    if not name or not phone or not service:
+        return "Missing required fields", 400
+
+    tokens = load_tokens()
+
+    token_number = f"{service[0].upper()}-{len(tokens)+1:03d}"
+
+    token = {
+        "number": token_number,
+        "name": name,
+        "phone": phone,
         "service": service,
         "appointment_id": appointment_id,
         "status": "Pending"
@@ -92,6 +128,13 @@ def get_token():
     save_tokens(tokens)
 
     return render_template("token_success.html", token=token)
+
+
+@app.route('/token_status')
+def token_status():
+    tokens = load_tokens()  
+    services = sorted({token['service'] for token in tokens}) if tokens else []
+    return render_template('token_status.html', tokens=tokens, services=services)
 
 @app.route('/admin')
 def admin_panel():

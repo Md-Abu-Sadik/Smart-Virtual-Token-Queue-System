@@ -64,8 +64,8 @@
                 ⏳ Waiting
               {% elif token.status == "in_service" %}
                 🏥 In Service
-              {% elif token.status == "done" %}
-                ✅ Done
+              {% elif token.status == "done" or token.status == "Completed" %}
+                ✅ Completed
               {% else %}
                 ❓ Unknown
               {% endif %}
