@@ -72,6 +72,8 @@ def submit_appointment():
 
     return render_template("appointment_success.html", appointment_id=appointment_id)
 
+
+
 @app.route('/get_token', methods=['POST'])
 def get_token():
     name = request.form.get('name')
@@ -163,22 +165,28 @@ def my_appointments():
     appointments = load_appointments()
     return render_template("my_appointments.html", appointments=appointments)
 
-@app.route('/manage_appointment', methods=['POST'])
+@app.route('/manage_appointment', methods=['GET', 'POST'])
 def manage_appointment():
+    if request.method == 'POST':
+        appointments = load_appointments()
+        appointment_id = request.form['appointment_id']
+        action = request.form['action']
+
+        index = next((i for i, a in enumerate(appointments) if a.get('id') == appointment_id), None)
+
+        if index is not None:
+            if action == 'cancel':
+                appointments.pop(index)
+            elif action == 'reschedule':
+                appointments[index]['status'] = 'Rescheduled'
+            save_appointments(appointments)
+
+        return redirect('/my_appointments')
+
+    # For GET request — load the form/page to cancel/reschedule
     appointments = load_appointments()
-    appointment_id = request.form['appointment_id']
-    action = request.form['action']
+    return render_template("manage_appointment.html", appointments=appointments)
 
-    index = next((i for i, a in enumerate(appointments) if a.get('id') == appointment_id), None)
-
-    if index is not None:
-        if action == 'cancel':
-            appointments.pop(index)
-        elif action == 'reschedule':
-            appointments[index]['status'] = 'Rescheduled'
-        save_appointments(appointments)
-
-    return redirect('/my_appointments')
 
 if __name__ == '__main__':
     app.run(debug=True)
