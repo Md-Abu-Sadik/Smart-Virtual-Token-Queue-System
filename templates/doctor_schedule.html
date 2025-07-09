@@ -4,121 +4,112 @@
   <meta charset="UTF-8">
   <title>Doctor Schedule</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: url("{{ url_for('static', filename='bg.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      color: white;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: -1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .table {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: black;
+    }
+
+    .table thead {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: #cce5ff;
+      cursor: pointer;
+    }
+
+    .table-hover tbody tr.selected {
+      background-color: #66b0ff !important;
+    }
+
+    .btn-fixed {
+      margin-top: 20px;
+    }
+  </style>
 </head>
-<body class="bg-light">
+<body>
   <div class="container py-5">
-    <h2 class="text-center mb-4">📅 Doctor Schedule</h2>
-    <table class="table table-bordered table-hover bg-white shadow">
-      <thead class="table-dark">
-        <tr>
-          <th>Doctor Name</th>
-          <th>Specialty</th>
-          <th>Hospital</th>
-          <th>Available Days</th>
-          <th>Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Dr. Ahsan</td>
-          <td>Dental</td>
-          <td>Ibn Sina</td>
-          <td>Mon, Wed, Fri</td>
-          <td>10 AM - 1 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Rina</td>
-          <td>Eye Checkup</td>
-          <td>Usmani Medical Sylhet</td>
-          <td>Tue, Thu</td>
-          <td>11 AM - 3 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Kabir</td>
-          <td>General Physician</td>
-          <td>Womens Medical</td>
-          <td>Sun to Thu</td>
-          <td>9 AM - 2 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Mahmud</td>
-          <td>Pediatrics</td>
-          <td>Al Haramain Hospital</td>
-          <td>Sat, Mon, Wed</td>
-          <td>10 AM - 12 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Salma Akter</td>
-          <td>Gynecology</td>
-          <td>Popular Hospital</td>
-          <td>Mon to Thu</td>
-          <td>1 PM - 4 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Nayeem</td>
-          <td>ENT</td>
-          <td>National Heart Foundation</td>
-          <td>Sun, Tue, Thu</td>
-          <td>2 PM - 5 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Sumiya Rahman</td>
-          <td>Dermatology</td>
-          <td>Medinova Health Care</td>
-          <td>Everyday</td>
-          <td>10 AM - 1 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Hasan Jamil</td>
-          <td>Cardiology</td>
-          <td>Ibn Sina</td>
-          <td>Mon, Wed, Fri</td>
-          <td>9 AM - 12 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Rezaul Karim</td>
-          <td>Orthopedics</td>
-          <td>Usmani Medical Sylhet</td>
-          <td>Tue, Thu</td>
-          <td>3 PM - 6 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Tamanna Rahim</td>
-          <td>Neurology</td>
-          <td>Womens Medical</td>
-          <td>Sun to Tue</td>
-          <td>12 PM - 3 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Kamal Uddin</td>
-          <td>Psychiatry</td>
-          <td>Popular Hospital</td>
-          <td>Wed, Thu</td>
-          <td>2 PM - 5 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Faria Hossain</td>
-          <td>Physiotherapy</td>
-          <td>Medinova Health Care</td>
-          <td>Mon to Fri</td>
-          <td>9 AM - 11 AM</td>
-        </tr>
-        <tr>
-          <td>Dr. Noorul Islam</td>
-          <td>Vaccination</td>
-          <td>National Heart Foundation</td>
-          <td>Sat, Sun, Wed</td>
-          <td>10 AM - 1 PM</td>
-        </tr>
-        <tr>
-          <td>Dr. Afroza Yasmin</td>
-          <td>Blood Test</td>
-          <td>Al Haramain Hospital</td>
-          <td>Everyday</td>
-          <td>8 AM - 12 PM</td>
-        </tr>
-      </tbody>
-    </table>
+    <h2 class="text-center mb-4">📅 Select Your Doctor</h2>
+
+    <form method="POST" action="/select_doctor">
+      <input type="hidden" name="doctor_name" id="selectedDoctorInput">
+
+      <table class="table table-bordered table-hover shadow" id="doctorTable">
+        <thead>
+          <tr>
+            <th>Doctor Name</th>
+            <th>Specialty</th>
+            <th>Hospital</th>
+            <th>Available Days</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dr. Ahsan</td><td>Dental</td><td>Ibn Sina</td><td>Mon, Wed, Fri</td><td>10 AM - 1 PM</td></tr>
+          <tr><td>Dr. Rina</td><td>Eye Checkup</td><td>Usmani Medical Sylhet</td><td>Tue, Thu</td><td>11 AM - 3 PM</td></tr>
+          <tr><td>Dr. Kabir</td><td>General Physician</td><td>Womens Medical</td><td>Sun to Thu</td><td>9 AM - 2 PM</td></tr>
+          <tr><td>Dr. Mahmud</td><td>Pediatrics</td><td>Al Haramain Hospital</td><td>Sat, Mon, Wed</td><td>10 AM - 12 PM</td></tr>
+          <tr><td>Dr. Salma Akter</td><td>Gynecology</td><td>Popular Hospital</td><td>Mon to Thu</td><td>1 PM - 4 PM</td></tr>
+          <tr><td>Dr. Nayeem</td><td>ENT</td><td>National Heart Foundation</td><td>Sun, Tue, Thu</td><td>2 PM - 5 PM</td></tr>
+          <tr><td>Dr. Sumiya Rahman</td><td>Dermatology</td><td>Medinova Health Care</td><td>Everyday</td><td>10 AM - 1 PM</td></tr>
+          <tr><td>Dr. Hasan Jamil</td><td>Cardiology</td><td>Ibn Sina</td><td>Mon, Wed, Fri</td><td>9 AM - 12 PM</td></tr>
+          <tr><td>Dr. Rezaul Karim</td><td>Orthopedics</td><td>Usmani Medical Sylhet</td><td>Tue, Thu</td><td>3 PM - 6 PM</td></tr>
+          <tr><td>Dr. Tamanna Rahim</td><td>Neurology</td><td>Womens Medical</td><td>Sun to Tue</td><td>12 PM - 3 PM</td></tr>
+          <tr><td>Dr. Kamal Uddin</td><td>Psychiatry</td><td>Popular Hospital</td><td>Wed, Thu</td><td>2 PM - 5 PM</td></tr>
+          <tr><td>Dr. Faria Hossain</td><td>Physiotherapy</td><td>Medinova Health Care</td><td>Mon to Fri</td><td>9 AM - 11 AM</td></tr>
+          <tr><td>Dr. Noorul Islam</td><td>Vaccination</td><td>National Heart Foundation</td><td>Sat, Sun, Wed</td><td>10 AM - 1 PM</td></tr>
+          <tr><td>Dr. Afroza Yasmin</td><td>Blood Test</td><td>Al Haramain Hospital</td><td>Everyday</td><td>8 AM - 12 PM</td></tr>
+        </tbody>
+      </table>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-fixed" id="continueBtn" style="display: none;">Continue with Selected Doctor</button>
+      </div>
+    </form>
   </div>
+
+  <script>
+    const tableRows = document.querySelectorAll("#doctorTable tbody tr");
+    const selectedDoctorInput = document.getElementById("selectedDoctorInput");
+    const continueBtn = document.getElementById("continueBtn");
+
+    tableRows.forEach(row => {
+      row.addEventListener("click", () => {
+        tableRows.forEach(r => r.classList.remove("selected"));
+        row.classList.add("selected");
+        selectedDoctorInput.value = row.cells[0].textContent;
+        continueBtn.style.display = "inline-block";
+      });
+    });
+  </script>
 </body>
 </html>

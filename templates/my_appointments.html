@@ -10,7 +10,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url("{{ url_for('static', filename='clinic.jpg') }}") no-repeat center center fixed;
+      background: url("{{ url_for('static', filename='appointment.jpg') }}") no-repeat center center fixed;
       background-size: cover;
     }
 
@@ -65,7 +65,7 @@
       <td>{{ appt.phone }}</td>
       <td>{{ appt.age }}</td>
       <td>{{ appt.service }}</td>
-      <td>{{ appt.doctor }}</td>
+      <td>{{ appt.doctor or 'Not Assigned' }}</td>
       <td>{{ appt.date }}</td>
       <td>{{ appt.time }}</td>
     </tr>

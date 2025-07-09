@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 import uuid
 import os
@@ -46,7 +46,8 @@ def home():
 
 @app.route('/book_appointment')
 def book_appointment():
-    return render_template('book_appointment.html')
+    doctor_name = request.args.get('doctor', 'Not Assigned')
+    return render_template('book_appointment.html', doctor_name=doctor_name)
 
 @app.route('/doctor_schedule')
 def doctor_schedule():
@@ -59,20 +60,21 @@ def submit_appointment():
     phone = request.form['phone']
     age = request.form['age']
     service = request.form['service']
+    doctor = request.form.get('doctor', '')  # ✅ New line
     appointment_id = str(uuid.uuid4())[:8]
     date = request.form['date']
 
     new_appt = {
-    'id': appointment_id,
-    'name': name,
-    'phone': phone,
-    'age': age,
-    'service': service,
-    'status': 'Booked',
-    "date": date,         # ✅ Correct quotation
-    "doctor": "",
-    "time": ""
-}
+        'id': appointment_id,
+        'name': name,
+        'phone': phone,
+        'age': age,
+        'service': service,
+        'status': 'Booked',
+        'date': date,
+        'doctor': doctor,    # ✅ Just using the variable
+        'time': ''
+    }
 
     appointments.append(new_appt)
     save_appointments(appointments)
@@ -222,6 +224,12 @@ def manage_appointment():
     # For GET request — load the form/page to cancel/reschedule
     appointments = load_appointments()
     return render_template("manage_appointment.html", appointments=appointments)
+
+@app.route('/select_doctor', methods=['POST'])
+def select_doctor():
+    doctor_name = request.form.get('doctor_name')
+    return redirect(url_for('book_appointment', doctor=doctor_name))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
