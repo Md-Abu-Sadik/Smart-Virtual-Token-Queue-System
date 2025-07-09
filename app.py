@@ -223,8 +223,5 @@ def manage_appointment():
     appointments = load_appointments()
     return render_template("manage_appointment.html", appointments=appointments)
 
-
-
-
 if __name__ == '__main__':
     app.run(debug=True)
