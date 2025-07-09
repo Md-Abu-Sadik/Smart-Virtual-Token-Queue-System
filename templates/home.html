@@ -23,11 +23,15 @@
 }
 
 @keyframes scroll-left {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
 }
 </style>
-
 
 <head>
   <meta charset="UTF-8">
@@ -41,6 +45,11 @@
       color: white;
       text-align: center;
       margin-top: 20px;
+      background: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+      padding: 10px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
@@ -140,7 +149,8 @@
 
           <!-- ✅ Phone Input -->
           <input type="text" name="phone" class="form-control w-75 mb-3 animate" placeholder="Phone Number" required>
-           <input type="date" name="date" class="form-control w-75 mb-3 animate" required>
+          <input type="date" name="date" class="form-control w-75 mb-3 animate" required>
+
           <!-- Submit Button -->
           <button type="submit" class="btn btn-primary w-75 mb-3 animate">Get Token</button>
         </form>
@@ -157,8 +167,6 @@
             onclick="location.href='/manage_appointment'">Cancel or Reschedule Appointment</button>
           <a href="/admin" class="btn btn-danger w-100 mt-2 animate">🔐 Admin Panel</a>
         </div>
-
-
       </div>
     </div>
   </div>
