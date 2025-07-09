@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect
+from datetime import datetime
 import uuid
 import os
 import json
+
+
 
 app = Flask(__name__)
 
@@ -57,15 +60,19 @@ def submit_appointment():
     age = request.form['age']
     service = request.form['service']
     appointment_id = str(uuid.uuid4())[:8]
+    date = request.form['date']
 
     new_appt = {
-        'id': appointment_id,
-        'name': name,
-        'phone': phone,
-        'age': age,
-        'service': service,
-        'status': 'Booked'
-    }
+    'id': appointment_id,
+    'name': name,
+    'phone': phone,
+    'age': age,
+    'service': service,
+    'status': 'Booked',
+    "date": date,         # ✅ Correct quotation
+    "doctor": "",
+    "time": ""
+}
 
     appointments.append(new_appt)
     save_appointments(appointments)
@@ -78,7 +85,8 @@ def submit_appointment():
 def get_token():
     name = request.form.get('name')
     service = request.form.get('service')
-    phone = request.form.get('phone')  # ✅ Required
+    phone = request.form.get('phone')
+    date = request.form.get('date')  
     appointment_id = request.form.get('appointment_id')  # ❌ Optional
 
     # Simple validation for required fields
@@ -95,6 +103,7 @@ def get_token():
         "service": service,
         "appointment_id": appointment_id if appointment_id else None,
         "status": "Pending"
+        
     }
 
     tokens.append(token)
@@ -109,6 +118,8 @@ def generate_token():
     phone = request.form.get('phone')
     service = request.form.get('service')
     appointment_id = request.form.get('appointment_id')  # Optional
+    date = request.form['date']
+
 
     if not name or not phone or not service:
         return "Missing required fields", 400
@@ -118,12 +129,13 @@ def generate_token():
     token_number = f"{service[0].upper()}-{len(tokens)+1:03d}"
 
     token = {
-        "number": token_number,
-        "name": name,
-        "phone": phone,
-        "service": service,
-        "appointment_id": appointment_id,
-        "status": "Pending"
+    "number": token_number,
+    "name": name,
+    "phone": phone,
+    "service": service,
+    "appointment_id": appointment_id,
+    "status": "Pending",
+    "date": date  # ✅ No comma here
     }
 
     tokens.append(token)
@@ -134,25 +146,43 @@ def generate_token():
 
 @app.route('/token_status')
 def token_status():
-    tokens = load_tokens()  
+    tokens = load_tokens()
+    for token in tokens:
+        if 'date' in token and token['date']:
+            try:
+                token['date'] = datetime.strptime(token['date'], "%Y-%m-%d").strftime("%d-%m-%Y")
+            except ValueError:
+                pass   
     services = sorted({token['service'] for token in tokens}) if tokens else []
     return render_template('token_status.html', tokens=tokens, services=services)
 
 @app.route('/admin')
 def admin_panel():
     tokens = load_tokens()
+    token_number = request.form.get('token_number')
+    new_status = request.form.get('new_status')
+
+    for token in tokens:
+        if token.get('number') == token_number:
+            token['status'] = new_status
+            break
+
+    save_tokens(tokens)
     return render_template("admin.html", tokens=tokens)
 
 @app.route('/update_token', methods=['POST'])
 def update_token():
     token_number = request.form.get('token_number')
     name = request.form.get('name')
+    new_status = request.form.get('new_status')
     tokens = load_tokens()
+    with open(TOKENS_FILE, 'r') as f:
+        tokens = json.load(f)
 
     updated = False
     for token in tokens:
         if token.get('number') == token_number and token.get('name') == name:
-            token['status'] = 'Completed'
+            token['status'] = new_status  # ✅ Use selected status
             updated = True
 
     if updated:
@@ -163,6 +193,12 @@ def update_token():
 @app.route('/my_appointments')
 def my_appointments():
     appointments = load_appointments()
+    for appt in appointments:
+        if 'date' in appt and appt['date']:
+            try:
+                appt['date'] = datetime.strptime(appt['date'], "%Y-%m-%d").strftime("%d-%m-%Y")
+            except ValueError:
+                pass 
     return render_template("my_appointments.html", appointments=appointments)
 
 @app.route('/manage_appointment', methods=['GET', 'POST'])
@@ -186,6 +222,8 @@ def manage_appointment():
     # For GET request — load the form/page to cancel/reschedule
     appointments = load_appointments()
     return render_template("manage_appointment.html", appointments=appointments)
+
+
 
 
 if __name__ == '__main__':
