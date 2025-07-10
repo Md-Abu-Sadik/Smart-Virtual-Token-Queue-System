@@ -74,9 +74,9 @@
       <div class="col-md-6 right-side">
         <h2>Book Your Appointment</h2>
 
-        {% if doctor %}
+        {% if doctor_name %}
         <div class="doctor-info">
-          Booking With: {{ doctor }}
+          Booking With: {{ doctor_name }}
         </div>
         {% endif %}
 
@@ -86,8 +86,8 @@
           <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required>
           <input type="number" name="age" class="form-control" placeholder="Age" required>
 
-          {% if doctor %}
-          <input type="hidden" name="doctor_name" value="{{ doctor }}">
+          {% if doctor_name %}
+          <input type="hidden" name="doctor" value="{{ doctor_name }}">
           {% endif %}
 
           <select name="service" class="form-select" required>
@@ -110,9 +110,6 @@
 
           <input type="date" name="date" class="form-control mt-2" required>
 
-          
-          <input type="hidden" name="doctor" value="{{ doctor_name }}">
-          
           <button type="submit" class="btn btn-submit w-100">Submit</button>
         </form>
       </div>
