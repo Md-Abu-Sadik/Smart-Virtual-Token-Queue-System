@@ -22,8 +22,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); /* semi-dark overlay */
-      backdrop-filter: blur(5px); /* blur effect */
+      background-color: rgba(0, 0, 0, 0.5);
+      /* semi-dark overlay */
+      backdrop-filter: blur(5px);
+      /* blur effect */
       z-index: -1;
     }
 
@@ -33,11 +35,13 @@
     }
 
     .table {
-      background-color: rgba(255, 255, 255, 0.1); /* semi-transparent */
+      background-color: rgba(255, 255, 255, 0.1);
+      /* semi-transparent */
       color: white;
     }
 
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
       background-color: rgba(255, 255, 255, 0.1);
       color: white;
     }
@@ -72,8 +76,14 @@
 
 <body>
   <div class="container mt-5">
-    <h2 class="text-center mb-4">📋 Token Status</h2>
 
+    <h2 class="text-center mb-4">
+      📋 Token Status
+      <a href="/display" class="btn btn-warning btn-sm ms-3"
+        style="font-weight: bold; font-size: 18px; border-radius: 10px;">
+        🔁 Display Token
+      </a>
+    </h2>
     <!-- 🔍 Filter and Search -->
     <div class="row mb-3">
       <div class="col-md-6">

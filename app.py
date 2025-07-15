@@ -231,5 +231,13 @@ def select_doctor():
     return redirect(url_for('book_appointment', doctor=doctor_name))
 
 
+
+@app.route('/display')
+def display_token():
+    tokens = load_tokens()
+    now_serving = next((t for t in tokens if t['status'] == 'Processing'), None)
+    current_time = datetime.now().strftime("%I:%M %p")
+    return render_template("display.html", token=now_serving, current_time=current_time)
+
 if __name__ == '__main__':
     app.run(debug=True)
