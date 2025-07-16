@@ -39,7 +39,9 @@
 
     <div class="container mt-5">
         <h2 class="mb-4">Token Management Panel</h2>
-
+        {% if today_count %}
+        <p>Today's Total Tokens: {{ today_count }}</p>
+        {% endif %}
         <!-- ✅ View History + Filter Form -->
         <div class="mb-4">
             <h4>View Token History</h4>

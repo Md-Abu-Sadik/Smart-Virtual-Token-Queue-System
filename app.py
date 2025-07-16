@@ -163,6 +163,8 @@ def admin_panel():
     tokens = load_tokens()
     token_number = request.form.get('token_number')
     new_status = request.form.get('new_status')
+    today = datetime.now().strftime('%Y-%m-%d')
+    today_count = sum(1 for token in tokens if token.get("date") == today)
 
     for token in tokens:
         if token.get('number') == token_number:
@@ -170,7 +172,7 @@ def admin_panel():
             break
 
     save_tokens(tokens)
-    return render_template("admin.html", tokens=tokens)
+    return render_template("admin.html", tokens=tokens,today_count=today_count)
 
 @app.route('/update_token', methods=['POST'])
 def update_token():
