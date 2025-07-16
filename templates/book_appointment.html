@@ -88,6 +88,7 @@
 
           {% if doctor_name %}
           <input type="hidden" name="doctor" value="{{ doctor_name }}">
+          <input type="hidden" name="time" value="{{ request.args.get('time', '') }}">
           {% endif %}
 
           <select name="service" class="form-select" required>

@@ -47,7 +47,8 @@ def home():
 @app.route('/book_appointment')
 def book_appointment():
     doctor_name = request.args.get('doctor', 'Not Assigned')
-    return render_template('book_appointment.html', doctor_name=doctor_name)
+    time = request.args.get('time', '') 
+    return render_template('book_appointment.html', doctor_name=doctor_name , time=time)
 
 @app.route('/doctor_schedule')
 def doctor_schedule():
@@ -63,6 +64,7 @@ def submit_appointment():
     doctor = request.form.get('doctor', '')  # ✅ New line
     appointment_id = str(uuid.uuid4())[:8]
     date = request.form['date']
+    time = request.form.get('time', '')
 
     new_appt = {
         'id': appointment_id,
@@ -73,7 +75,7 @@ def submit_appointment():
         'status': 'Booked',
         'date': date,
         'doctor': doctor,    # ✅ Just using the variable
-        'time': ''
+        'time': time
     }
 
     appointments.append(new_appt)
@@ -230,7 +232,8 @@ def manage_appointment():
 @app.route('/select_doctor', methods=['POST'])
 def select_doctor():
     doctor_name = request.form.get('doctor_name')
-    return redirect(url_for('book_appointment', doctor=doctor_name))
+    doctor_time = request.form.get('time')
+    return redirect(url_for('book_appointment', doctor=doctor_name ,time=doctor_time ))
 
 
 
