@@ -239,5 +239,34 @@ def display_token():
     current_time = datetime.now().strftime("%I:%M %p")
     return render_template("display.html", token=now_serving, current_time=current_time)
 
+
+@app.route("/history", methods=["GET"])
+def view_history():
+    date_filter = request.args.get("date")
+    service_filter = request.args.get("service")
+
+    tokens = load_tokens()
+
+    filtered_tokens = tokens
+    if date_filter:
+        filtered_tokens = [t for t in filtered_tokens if t.get("date") == date_filter]
+
+    if service_filter and service_filter != "":
+        filtered_tokens = [t for t in filtered_tokens if t.get("service") == service_filter]
+
+    return render_template("history.html", tokens=filtered_tokens)
+
+@app.route("/reset")
+def reset_queue():
+    tokens = load_tokens()
+    today = datetime.now().strftime('%Y-%m-%d')
+    
+    # Remove tokens with today's date
+    updated_tokens = [t for t in tokens if t.get("date") != today]
+    
+    save_tokens(updated_tokens)
+    return redirect(url_for("admin_panel"))
+
+
 if __name__ == '__main__':
     app.run(debug=True)

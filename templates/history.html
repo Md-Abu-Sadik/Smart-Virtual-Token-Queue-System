@@ -1,0 +1,15 @@
+<h2>Filtered Token History</h2>
+<table border="1">
+    <tr>
+        <th>Token No</th>
+        <th>Service</th>
+        <th>Date</th>
+    </tr>
+    {% for row in records %}
+    <tr>
+        <td>{{ row['token_no'] }}</td>
+        <td>{{ row['service_type'] }}</td>
+        <td>{{ row['date'] }}</td>
+    </tr>
+    {% endfor %}
+</table>
