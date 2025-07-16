@@ -207,6 +207,7 @@ def my_appointments():
                 pass 
     return render_template("my_appointments.html", appointments=appointments)
 
+
 @app.route('/manage_appointment', methods=['GET', 'POST'])
 def manage_appointment():
     if request.method == 'POST':
@@ -220,7 +221,16 @@ def manage_appointment():
             if action == 'cancel':
                 appointments.pop(index)
             elif action == 'reschedule':
+                new_datetime = request.form.get('new_time')  # e.g. "2025-07-18T14:00"
+                if new_datetime:
+                    try:
+                        dt_obj = datetime.strptime(new_datetime, "%Y-%m-%dT%H:%M")
+                        appointments[index]['date'] = dt_obj.strftime("%Y-%m-%d")
+                        appointments[index]['time'] = dt_obj.strftime("%I:%M %p")
+                    except ValueError:
+                        pass
                 appointments[index]['status'] = 'Rescheduled'
+            
             save_appointments(appointments)
 
         return redirect('/my_appointments')

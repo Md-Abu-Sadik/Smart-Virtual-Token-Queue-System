@@ -49,9 +49,9 @@
         "phone": "64651651651",
         "age": "25",
         "service": "Psychiatry",
-        "status": "Booked",
-        "date": "2025-07-24",
+        "status": "Rescheduled",
+        "date": "2025-07-21",
         "doctor": "Dr. Salma Akter",
-        "time": "1 PM - 4 PM"
+        "time": "05:17 PM"
     }
 ]
