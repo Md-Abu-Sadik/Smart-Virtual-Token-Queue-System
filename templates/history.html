@@ -1,5 +1,65 @@
-<h2>Filtered Token History</h2>
-<table border="1">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Filtered Token History</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      position: relative;
+      font-family: Arial, sans-serif;
+      z-index: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("{{ url_for('static', filename='history.jpg') }}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(8px) brightness(0.6);
+      z-index: -1;
+      animation: zoomInOut 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes zoomInOut {
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(1.05);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      color: white;
+    }
+
+    table {
+      margin: auto;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+    }
+
+    th, td {
+      padding: 10px 20px;
+      border: 1px solid white;
+    }
+  </style>
+</head>
+<body>
+  <h2>Filtered Token History</h2>
+  <table border="1">
     <tr>
         <th>Token No</th>
         <th>Service</th>
@@ -12,4 +72,6 @@
         <td>{{ row['date'] }}</td>
     </tr>
     {% endfor %}
-</table>
+  </table>
+</body>
+</html>
