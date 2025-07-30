@@ -81,9 +81,12 @@
         {% endif %}
 
         <form method="post" action="/submit_appointment">
-          <a href="/doctor_schedule" class="form-control text-center text-primary mt-2" style="text-decoration: none;">Doctor Schedule</a>
+          <a href="/doctor_schedule" class="form-control text-center text-primary mt-2"
+            style="text-decoration: none;">Doctor Schedule</a>
           <input type="text" name="name" class="form-control" placeholder="Your Name" required>
-          <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required>
+          <input type="tel" name="phone" class="form-control" placeholder="Phone Number"
+            pattern="^(?:\+?88)?01[3-9]\d{8}$" required
+            title="Enter a valid Bangladeshi number (e.g., 017XXXXXXXX or +88017XXXXXXXX)">
           <input type="number" name="age" class="form-control" placeholder="Age" required>
 
           {% if doctor_name %}
