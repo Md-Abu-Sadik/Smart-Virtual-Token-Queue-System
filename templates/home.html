@@ -148,7 +148,11 @@
           </div>
 
           <!-- ✅ Phone Input -->
-          <input type="text" name="phone" class="form-control w-75 mb-3 animate" placeholder="Phone Number" required>
+          <input type="tel" name="phone" class="form-control w-75 mb-3 animate"
+       placeholder="Phone Number (e.g. 017XXXXXXXX)" 
+       pattern="^(01)[3-9][0-9]{8}$"
+       title="Enter a valid 11-digit Bangladeshi number starting with 01"
+       required>
           <input type="date" name="date" class="form-control w-75 mb-3 animate" required>
 
           <!-- Submit Button -->
@@ -160,7 +164,6 @@
         <div class="d-flex flex-column align-items-center w-75">
           <a href="/token_status" class="btn btn-outline-light w-100 mb-2">Token Status</a>
           <a href="/book_appointment" class="btn btn-outline-primary w-100 mb-2 animate">Book Appointment</a>
-          <button class="btn btn-outline-primary w-100 mb-2 animate">Online Consultation</button>
           <button class="btn btn-outline-primary w-100 mb-2 animate" onclick="location.href='/my_appointments'">My
             Appointments</button>
           <button class="btn btn-outline-primary w-100 mb-2 animate"
