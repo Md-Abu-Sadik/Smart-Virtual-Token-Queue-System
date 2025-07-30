@@ -64,5 +64,16 @@
         "date": "2025-07-31",
         "doctor": "Dr. Karim Uddin",
         "time": "3 PM - 6 PM"
+    },
+    {
+        "id": "4e691dba",
+        "name": "Nabil",
+        "phone": "01612055287",
+        "age": "25",
+        "service": "Physiotherapy",
+        "status": "Booked",
+        "date": "2025-07-31",
+        "doctor": "Dr. Kabir",
+        "time": "9 AM - 2 PM"
     }
 ]
