@@ -2,209 +2,235 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- ✅ Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Teko:wght@500;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- ✅ Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Teko:wght@500;700&display=swap"
+        rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      background: url("{{ url_for('static', filename='admin.jpg') }}") no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-      font-family: 'Poppins', sans-serif;
-      color: #fff;
-    }
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: url("{{ url_for('static', filename='admin.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+        }
 
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(6px);
-      z-index: -1;
-    }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            z-index: -1;
+        }
 
-    .container {
-      position: relative;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      animation: fadeIn 1.2s ease-in-out;
-    }
+        .container {
+            position: relative;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            animation: fadeIn 1.2s ease-in-out;
+        }
 
-    h2 {
-      font-family: 'Teko', sans-serif;
-      font-size: 50px;
-      font-weight: 700;
-      color: #00bcd4;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-      margin-bottom: 20px;
-    }
+        h2 {
+            font-family: 'Teko', sans-serif;
+            font-size: 50px;
+            font-weight: 700;
+            color: #86e3f0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+        }
 
-    .form-label {
-      color: #ffeb3b;
-      font-weight: 500;
-    }
+        .token-count {
+            font-family: 'Teko', sans-serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: #ffeb3b;
+            /* Bright yellow color for visibility */
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+            /* shadow for contrast */
+            margin-top: 10px;
+            text-align: center;
+            animation: fadeIn 1.2s ease-in-out;
+        }
 
-    .form-control,
-    .form-select {
-      background-color: rgba(255,255,255,0.15);
-      border: none;
-      color: #fff;
-      transition: background-color 0.3s ease;
-    }
+        .form-label {
+            color: #ffeb3b;
+            font-weight: 500;
+        }
 
-    .form-control:hover,
-    .form-select:hover {
-      background-color: rgba(255,255,255,0.25);
-    }
+        .form-control,
+        .form-select {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
 
-    select option {
-      background-color: #fff;
-      color: #000;
-    }
+        .form-control:hover,
+        .form-select:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
 
-    .btn-success, .btn-danger, .btn-primary {
-      font-weight: bold;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        select option {
+            background-color: #fff;
+            color: #000;
+        }
 
-    .btn-success:hover, .btn-danger:hover, .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
+        .btn-success,
+        .btn-danger,
+        .btn-primary {
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    table {
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    }
+        .btn-success:hover,
+        .btn-danger:hover,
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
 
-    table th {
-      background-color: #455a64;
-      color: #fff;
-    }
+        table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
 
-    table td {
-      background-color: rgba(255,255,255,0.9);
-      color: #333;
-      vertical-align: middle;
-    }
+        table th {
+            background-color: #455a64;
+            color: #fff;
+        }
 
-    .badge {
-      font-size: 0.9em;
-    }
+        table td {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            vertical-align: middle;
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+        .badge {
+            font-size: 0.9em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <div class="container">
-    <h2 class="text-center">🔑 Token Management Panel</h2>
+    <div class="container">
+        <h2 class="text-center">🔑 Token Management Panel</h2>
 
-    {% if today_count %}
-    <p class="text-center">Today's Total Tokens: <strong>{{ today_count }}</strong></p>
-    {% endif %}
+        {% if today_count %}
+        <p class="token-count">Today's Total Tokens: <strong>{{ today_count }}</strong></p>
+        {% endif %}
 
-    <!-- ✅ View History + Filter Form -->
-    <div class="mb-5">
-      <h4>View Token History</h4>
-      <form method="GET" action="/history" class="row g-3 align-items-end">
-        <div class="col-md-3">
-          <label for="date" class="form-label">Date:</label>
-          <input type="date" id="date" name="date" class="form-control">
+        <!-- ✅ View History + Filter Form -->
+        <div class="mb-5">
+            <h4>View Token History</h4>
+            <form method="GET" action="/history" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="date" class="form-label">Date:</label>
+                    <input type="date" id="date" name="date" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="service" class="form-label">Service Type:</label>
+                    <select id="service" name="service" class="form-select">
+                        <option value="">All</option>
+                        <option>Dental</option>
+                        <option>Eye Checkup</option>
+                        <option>General Physician</option>
+                        <option>Pediatrics</option>
+                        <option>Gynecology</option>
+                        <option>ENT</option>
+                        <option>Dermatology</option>
+                        <option>Cardiology</option>
+                        <option>Orthopedics</option>
+                        <option>Neurology</option>
+                        <option>Psychiatry</option>
+                        <option>Physiotherapy</option>
+                        <option>Vaccination</option>
+                        <option>Blood Test</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-success w-100">Filter</button>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="/reset" onclick="return confirm('Are you sure you want to reset today’s queue?')">
+                        <button type="button" class="btn btn-danger w-100">Reset Queue</button>
+                    </a>
+                </div>
+            </form>
         </div>
 
-        <div class="col-md-3">
-          <label for="service" class="form-label">Service Type:</label>
-          <select id="service" name="service" class="form-select">
-            <option value="">All</option>
-            <option>Dental</option>
-            <option>Eye Checkup</option>
-            <option>General Physician</option>
-            <option>Pediatrics</option>
-            <option>Gynecology</option>
-            <option>ENT</option>
-            <option>Dermatology</option>
-            <option>Cardiology</option>
-            <option>Orthopedics</option>
-            <option>Neurology</option>
-            <option>Psychiatry</option>
-            <option>Physiotherapy</option>
-            <option>Vaccination</option>
-            <option>Blood Test</option>
-          </select>
-        </div>
-
-        <div class="col-md-2">
-          <button class="btn btn-success w-100">Filter</button>
-        </div>
-
-        <div class="col-md-2">
-          <a href="/reset" onclick="return confirm('Are you sure you want to reset today’s queue?')">
-            <button type="button" class="btn btn-danger w-100">Reset Queue</button>
-          </a>
-        </div>
-      </form>
+        <!-- ✅ Token Table -->
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Token No</th>
+                    <th>Name</th>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for token in tokens %}
+                <tr>
+                    <td>{{ token.number }}</td>
+                    <td>{{ token.name }}</td>
+                    <td>{{ token.service }}</td>
+                    <td>
+                        {% if token.status == "Waiting" %}
+                        <span class="badge bg-warning text-dark">Waiting</span>
+                        {% elif token.status == "Processing" %}
+                        <span class="badge bg-primary">Processing</span>
+                        {% elif token.status == "Completed" %}
+                        <span class="badge bg-success">Completed</span>
+                        {% else %}
+                        <span class="badge bg-dark">Unknown</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="POST" action="{{ url_for('update_token') }}">
+                            <input type="hidden" name="token_number" value="{{ token.number }}">
+                            <input type="hidden" name="name" value="{{ token.name }}">
+                            <select name="new_status" class="form-select form-select-sm d-inline w-auto">
+                                <option {% if token.status=='Waiting' %}selected{% endif %}>Waiting</option>
+                                <option {% if token.status=='Processing' %}selected{% endif %}>Processing</option>
+                                <option {% if token.status=='Completed' %}selected{% endif %}>Completed</option>
+                            </select>
+                            <button class="btn btn-primary btn-sm">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
-    <!-- ✅ Token Table -->
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>Token No</th>
-          <th>Name</th>
-          <th>Service</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for token in tokens %}
-        <tr>
-          <td>{{ token.number }}</td>
-          <td>{{ token.name }}</td>
-          <td>{{ token.service }}</td>
-          <td>
-            {% if token.status == "Waiting" %}
-            <span class="badge bg-warning text-dark">Waiting</span>
-            {% elif token.status == "Processing" %}
-            <span class="badge bg-primary">Processing</span>
-            {% elif token.status == "Completed" %}
-            <span class="badge bg-success">Completed</span>
-            {% else %}
-            <span class="badge bg-dark">Unknown</span>
-            {% endif %}
-          </td>
-          <td>
-            <form method="POST" action="{{ url_for('update_token') }}">
-              <input type="hidden" name="token_number" value="{{ token.number }}">
-              <input type="hidden" name="name" value="{{ token.name }}">
-              <select name="new_status" class="form-select form-select-sm d-inline w-auto">
-                <option {% if token.status=='Waiting' %}selected{% endif %}>Waiting</option>
-                <option {% if token.status=='Processing' %}selected{% endif %}>Processing</option>
-                <option {% if token.status=='Completed' %}selected{% endif %}>Completed</option>
-              </select>
-              <button class="btn btn-primary btn-sm">Update</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
 </body>
+
 </html>
