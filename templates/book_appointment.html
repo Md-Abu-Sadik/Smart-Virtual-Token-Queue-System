@@ -20,7 +20,7 @@
       background: url("{{ url_for('static', filename='clinic.jpg') }}") no-repeat center center;
       background-size: cover;
       height: 100vh;
-      animation: fadeIn 0.8s ease-in both;
+      /* ❌ Removed animation */
     }
 
     .right-side {
@@ -31,9 +31,9 @@
       justify-content: center;
       padding: 40px;
       height: 100vh;
-      animation: fadeIn 0.8s ease-in both;
     }
 
+    /* ✅ Keep animation only for these */
     .right-side h2,
     .doctor-info,
     form,
