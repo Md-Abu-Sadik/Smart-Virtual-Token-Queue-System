@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 import os
 import json
@@ -7,10 +8,12 @@ import json
 
 
 app = Flask(__name__)
+app.secret_key = 'super_secret_key' 
 
 # ---------- File Paths ----------
 APPOINTMENTS_FILE = 'appointments.json'
 TOKENS_FILE = 'tokens.json'
+ADMIN_USERS_FILE = 'admin_users.json'
 
 # ---------- Utility Functions ----------
 def load_appointments():
@@ -38,6 +41,18 @@ def load_tokens():
 def save_tokens(data):
     with open(TOKENS_FILE, 'w') as f:
         json.dump(data, f, indent=4)
+
+
+def load_admins():
+    if not os.path.exists(ADMIN_USERS_FILE):
+        return []
+    with open(ADMIN_USERS_FILE, 'r') as f:
+        return json.load(f)
+
+def save_admins(users):
+    with open(ADMIN_USERS_FILE, 'w') as f:
+        json.dump(users, f) 
+
 
 # ---------- Routes ----------
 @app.route('/')
@@ -160,21 +175,92 @@ def token_status():
     services = sorted({token['service'] for token in tokens}) if tokens else []
     return render_template('token_status.html', tokens=tokens, services=services)
 
-@app.route('/admin')
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        user_input = request.form['username']  # Username or Email
+        password = request.form['password']
+        admins = load_admins()
+        for user in admins:
+            # Check both username and email fields
+            if (user['username'] == user_input or user.get('email') == user_input) and check_password_hash(user['password'], password):
+                session['admin_user'] = user['username']
+                session['admin_name'] = user.get('name', user['username'])
+                return redirect(url_for('admin_panel'))
+        flash('Invalid username or password.')
+    return render_template('admin_login.html')
+
+
+
+@app.route('/admin/register', methods=['GET', 'POST'])
+def admin_register():
+    if request.method == 'POST':
+        name = request.form['name']
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        admins = load_admins()
+
+        # Username or Email already exists check
+        if any(u['username'] == username for u in admins):
+            flash('Username already exists.')
+        elif any(u.get('email') == email for u in admins):
+            flash('Email already exists.')
+        elif password != confirm_password:
+            flash('Passwords do not match.')
+        else:
+            admins.append({
+                'name': name,
+                'username': username,
+                'email': email,
+                'password': generate_password_hash(password)
+            })
+            save_admins(admins)
+            flash('Registration successful. Please log in.')
+            return redirect(url_for('admin_login'))
+
+    return render_template('admin_register.html')
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin_user', None)
+    return redirect(url_for('admin_login'))
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.pop('admin_email', None)
+    return redirect(url_for('admin_login'))  # or your login page
+
+@app.route('/admin', methods=['GET', 'POST'])
 def admin_panel():
+    # ✅ Require admin login
+    if 'admin_user' not in session:
+        return redirect(url_for('admin_login'))
+
     tokens = load_tokens()
-    token_number = request.form.get('token_number')
-    new_status = request.form.get('new_status')
     today = datetime.now().strftime('%Y-%m-%d')
     today_count = sum(1 for token in tokens if token.get("date") == today)
 
-    for token in tokens:
-        if token.get('number') == token_number:
-            token['status'] = new_status
-            break
+    if request.method == 'POST':
+        token_number = request.form.get('token_number')
+        new_status = request.form.get('new_status')
+        # Only update if both provided
+        if token_number and new_status:
+            for token in tokens:
+                if token.get('number') == token_number:
+                    token['status'] = new_status
+                    break
+            save_tokens(tokens)
+            flash("Token status updated!", "success")
+            # Optionally: redirect to avoid form resubmission on refresh
+            return redirect(url_for('admin_panel'))
 
-    save_tokens(tokens)
-    return render_template("admin.html", tokens=tokens,today_count=today_count)
+    # 👇 Add this to pass admin_name to the template
+    return render_template("admin.html", tokens=tokens, today_count=today_count, admin_name=session.get('admin_name', 'Admin'))
+
 
 @app.route('/update_token', methods=['POST'])
 def update_token():
