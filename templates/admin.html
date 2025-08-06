@@ -178,9 +178,11 @@
                 </div>
 
                 <div class="col-md-2">
-                    <a href="/reset" onclick="return confirm('Are you sure you want to reset today’s queue?')">
-                        <button type="button" class="btn btn-danger w-100">Reset Queue</button>
-                    </a>
+                    <!-- Button to open the modal instead of direct link/confirm -->
+                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
+                        data-bs-target="#resetModal">
+                        Reset Queue
+                    </button>
                 </div>
             </form>
         </div>
@@ -231,6 +233,35 @@
         </table>
     </div>
 
+<!-- Reset Modal -->
+<div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resetModalLabel">Reset Queue</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to reset?
+        <br>
+        <strong>Choose what to reset:</strong>
+      </div>
+      <div class="modal-footer">
+        <form method="POST" action="/reset_today" style="display:inline;">
+          <button type="submit" class="btn btn-warning">Reset Today's Token</button>
+        </form>
+        <form method="POST" action="/reset_all" style="display:inline;">
+          <button type="submit" class="btn btn-danger">Reset ALL Token</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </html>

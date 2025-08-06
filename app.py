@@ -271,17 +271,19 @@ def view_history():
 
     return render_template("history.html", tokens=filtered_tokens)
 
-@app.route("/reset")
-def reset_queue():
+@app.route("/reset_today", methods=["POST"])
+def reset_today():
     tokens = load_tokens()
     today = datetime.now().strftime('%Y-%m-%d')
-    
-    # Remove tokens with today's date
     updated_tokens = [t for t in tokens if t.get("date") != today]
-    
     save_tokens(updated_tokens)
     return redirect(url_for("admin_panel"))
 
+@app.route("/reset_all", methods=["POST"])
+def reset_all():
+    # Just clear all tokens
+    save_tokens([])
+    return redirect(url_for("admin_panel"))
 
 if __name__ == '__main__':
     app.run(debug=True)
